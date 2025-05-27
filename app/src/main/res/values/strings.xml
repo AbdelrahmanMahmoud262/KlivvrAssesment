@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Klivvr Assesment</string>
+    <string name="city_search">City Search</string>
+    <string name="cities">%1$s cities</string>
 </resources>

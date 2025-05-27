@@ -26,7 +26,12 @@ class CityRepositoryImpl(
 
 
     override suspend fun searchCountries(query: String): Flow<PagingData<CityEntity>> = Pager(
-        config = PagingConfig(pageSize = 20),
+        config = PagingConfig(
+            pageSize = 50,
+            initialLoadSize = 50,
+//            prefetchDistance = 5,
+            enablePlaceholders = true
+        ),
         pagingSourceFactory = {
             CityPagingSource(
                 trie = cityTrie,

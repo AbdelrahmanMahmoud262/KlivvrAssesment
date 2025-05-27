@@ -21,6 +21,7 @@ fun Context.populateTrieFromJsonStream(cityTrie: CityTrie) {
     try {
         assets.open("cities.json").use { inputStream ->
            val cities = Json.decodeFromStream<List<CityDataEntity>>(inputStream)
+               .sortedBy { it.name }
 
             cities.forEach {
                 cityTrie.insert(it)

@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.klivvrassesment.data.local.entity.CityDataEntity
 import com.klivvrassesment.data.local.utils.CityTrie
+import org.koin.core.context.startKoin
 
 class CityPagingSource(
     private val trie: CityTrie,
@@ -24,6 +25,8 @@ class CityPagingSource(
 
         return LoadResult.Page(
             data = pageData,
+            itemsBefore = fromIndex,
+            itemsAfter = allMatches.count() - toIndex,
             prevKey = if (page == 0) null else page - 1,
             nextKey = if (toIndex < allMatches.size) page + 1 else null
         )

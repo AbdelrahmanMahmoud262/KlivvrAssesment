@@ -6,6 +6,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.klivvrassesment.domain.repository.CityRepository
 import com.klivvrassesment.ui.models.toUiModel
+import com.klivvrassesment.ui.utils.withAlphabeticalHeaders
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,7 +42,9 @@ class MainViewModel(
         .debounce(300)
         .flatMapLatest {
             cityRepository.searchCountries(it).map { it.map { it.toUiModel() } }
-        }.cachedIn(viewModelScope)
+        }
+        .withAlphabeticalHeaders()
+        .cachedIn(viewModelScope)
 
     /**
      * Handles UI events triggered by the Main screen.
