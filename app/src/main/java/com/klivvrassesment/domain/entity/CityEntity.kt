@@ -4,7 +4,7 @@ import com.klivvrassesment.data.local.entity.CityDataEntity
 import java.util.Locale
 
 data class CityEntity(
-    val country: Locale.IsoCountryCode,
+    val country: String,
     val name:String,
     val id:Int,
     val coordinates: Coordinates
@@ -19,7 +19,7 @@ data class CityEntity(
 
 // City mapper
 fun CityDataEntity.toEntity() = CityEntity(
-    country = Locale.IsoCountryCode.valueOf(country.lowercase()),
+    country = country,
     name = name,
     id = id,
     coordinates = CityEntity.Coordinates(

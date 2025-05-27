@@ -1,29 +1,34 @@
 package com.klivvrassesment.data.local.utils
 
+import android.util.Log
 import com.klivvrassesment.data.local.entity.CityDataEntity
 
-object TrieNode{
+class TrieNode {
     val children: MutableMap<Char, TrieNode> = mutableMapOf()
     val cities: MutableList<CityDataEntity> = mutableListOf()
 }
 
 
-class CountryTrie {
+class CityTrie {
 
-    private val root = TrieNode
+    private val root = TrieNode()
 
-    fun insert(country: CityDataEntity){
+    fun insert(city: CityDataEntity) {
+        root.cities.add(city)
         var node = root
-        for (char in country.name){
-            node = node.children.getOrPut(char){TrieNode}
-            node.cities.add(country)
+        for (char in city.name.lowercase()) {
+            node = node.children.getOrPut(char) { TrieNode() }
+            node.cities.add(city)
         }
     }
 
-    fun searchPrefix(query: String):List<CityDataEntity>{
+    fun searchPrefix(query: String): List<CityDataEntity> {
+        Log.d("searchPrefix", "query: $query")
+        if (query.isEmpty()) return root.cities
         var node = root
-        for (char in query){
+        for (char in query.lowercase()) {
             node = node.children[char] ?: return emptyList()
+            Log.d("searchPrefix", "query: $query, char: $char, node: ${node.cities.size}")
         }
         return node.cities
     }
