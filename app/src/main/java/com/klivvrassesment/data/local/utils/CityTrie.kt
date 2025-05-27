@@ -23,12 +23,10 @@ class CityTrie {
     }
 
     fun searchPrefix(query: String): List<CityDataEntity> {
-        Log.d("searchPrefix", "query: $query")
         if (query.isEmpty()) return root.cities
         var node = root
         for (char in query.lowercase()) {
             node = node.children[char] ?: return emptyList()
-            Log.d("searchPrefix", "query: $query, char: $char, node: ${node.cities.size}")
         }
         return node.cities
     }
