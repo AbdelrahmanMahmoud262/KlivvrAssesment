@@ -20,7 +20,9 @@ class MainViewModel(
     private val cityRepository: CityRepository,
 ) : ViewModel() {
 
+    // MutableStateFlow that holds the query value
     private val _searchQuery = MutableStateFlow("")
+    // StateFlow that exposes the query value to the UI
     val searchQuery = _searchQuery
         .stateIn(
             scope = viewModelScope,
@@ -28,6 +30,12 @@ class MainViewModel(
             initialValue = ""
         )
 
+    /**
+     * A flow of paginated city data that updates based on the search query.
+     * It debounce the search query to avoid unnecessary updates while the user is typing,
+     * then fetches and maps the city data from the repository to UI models.
+     * The results are cached in the ViewModel's scope to preserve data across configuration changes.
+     */
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     val cities = _searchQuery
         .debounce(300)
@@ -35,6 +43,11 @@ class MainViewModel(
             cityRepository.searchCountries(it).map { it.map { it.toUiModel() } }
         }.cachedIn(viewModelScope)
 
+    /**
+     * Handles UI events triggered by the Main screen.
+     *
+     * @param event The UI event to handle.
+     */
     fun onEvent(event: MainUiEvent) {
         when (event) {
             is MainUiEvent.OnSearchQueryChange -> {

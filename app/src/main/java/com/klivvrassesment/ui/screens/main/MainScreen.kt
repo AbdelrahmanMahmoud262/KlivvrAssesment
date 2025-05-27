@@ -41,28 +41,6 @@ fun MainScreen(
     onEvent: (MainUiEvent) -> Unit
 ) {
 
-    LazyColumn {
 
-        stickyHeader {
-            TextField(
-                value = searchQuery,
-                onValueChange = {
-                    onEvent(MainUiEvent.OnSearchQueryChange(it))
-                },
-                modifier = Modifier
-                    .padding(16.dp)
-            )
-        }
-        items(cities.itemCount) {
-            cities[it]?.let {
-                Text(
-                    modifier = Modifier
-                        .padding(16.dp),
-                    text = "${it.name}, ${it.country}",
-                    fontSize = 20.sp
-                )
-            }
-        }
-    }
 
 }
