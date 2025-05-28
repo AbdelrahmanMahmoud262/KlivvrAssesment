@@ -57,6 +57,7 @@ import com.klivvrassesment.R
 import com.klivvrassesment.ui.models.CityListItem
 import com.klivvrassesment.ui.navigation.LocalNavController
 import com.klivvrassesment.ui.navigation.MainScreens
+import com.klivvrassesment.ui.utils.Constants.HEADER_SIZE
 import com.klivvrassesment.ui.utils.Constants.getFlagUrl
 import org.koin.androidx.compose.koinViewModel
 
@@ -86,8 +87,6 @@ fun MainScreenRoot(
     )
 
 }
-
-private val HEADER_SIZE = 60.dp
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
