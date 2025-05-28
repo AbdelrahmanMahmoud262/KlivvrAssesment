@@ -5,7 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.klivvrassesment.data.local.source.CityPagingSource
+import com.klivvrassesment.data.local.paging.CityPagingSource
 import com.klivvrassesment.data.local.utils.CityTrie
 import com.klivvrassesment.data.local.utils.populateTrieFromJsonStream
 import com.klivvrassesment.domain.entity.CityEntity
@@ -21,15 +21,16 @@ class CityRepositoryImpl(
 
 
     init {
+        // Load the data from the JSON file into the Trie
         context.populateTrieFromJsonStream(cityTrie)
     }
 
 
-    override suspend fun searchCountries(query: String): Flow<PagingData<CityEntity>> = Pager(
+    override suspend fun searchCities(query: String): Flow<PagingData<CityEntity>> = Pager(
         config = PagingConfig(
             pageSize = 50,
-            initialLoadSize = 50,
-//            prefetchDistance = 5,
+            initialLoadSize = 20,
+            // Enabling placeholders to be able to accumulate the total data size without being loaded yet
             enablePlaceholders = true
         ),
         pagingSourceFactory = {

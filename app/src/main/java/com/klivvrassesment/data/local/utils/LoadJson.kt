@@ -1,20 +1,23 @@
 package com.klivvrassesment.data.local.utils
 
 import android.content.Context
-import android.util.JsonReader
 import android.util.Log
 import com.klivvrassesment.data.local.entity.CityDataEntity
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-import java.io.InputStreamReader
 
-//
-//fun Context.loadCitiesFromAssets(): List<CityDataEntity> {
-//    val json = assets.open("cities.json").bufferedReader().use { it.readText() }
-//    return Json.decodeFromString(json)
-//}
 
+/**
+ * Populates a [CityTrie] with data from a JSON file ("cities.json") located in the assets folder.
+ *
+ * This function reads the JSON file as a stream, decodes it into a list of [CityDataEntity] objects,
+ * sorts them by name, and then inserts each city into the provided [CityTrie].
+ * It logs the number of successfully parsed and inserted cities, or logs an error if parsing fails.
+ *
+ * @receiver The [Context] used to access the assets.
+ * @param cityTrie The [CityTrie] instance to populate.
+ */
 @OptIn(ExperimentalSerializationApi::class)
 fun Context.populateTrieFromJsonStream(cityTrie: CityTrie) {
     var count = 0

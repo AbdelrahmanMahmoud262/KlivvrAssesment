@@ -8,6 +8,18 @@ import com.klivvrassesment.ui.models.CityUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+/**
+ * Extension function for a Flow of PagingData containing CityUiModel.
+ * It transforms the flow to include alphabetical headers for city names.
+ *
+ * This function maps each CityUiModel to a CityListItem.CityItem and then inserts
+ * CityListItem.Header separators based on the first letter of the city names.
+ * - A header is inserted at the beginning with the first letter of the first city.
+ * - A header is inserted between cities if their first letters are different.
+ * - A special "End" header is inserted at the very end.
+ *
+ * @return A new Flow of PagingData containing CityListItem, which includes both city items and headers.
+ */
 fun Flow<PagingData<CityUiModel>>.withAlphabeticalHeaders(): Flow<PagingData<CityListItem>> =
     this
         .map { pagingData ->

@@ -13,6 +13,12 @@ import com.klivvrassesment.ui.models.CityUiModel
 import com.klivvrassesment.ui.screens.main.MainScreenRoot
 import com.klivvrassesment.ui.screens.maps.MapsScreenRoot
 
+/**
+ * CompositionLocal to provide NavHostController to the composables.
+ * This allows access to the NavController from anywhere in the composable tree
+ * without explicitly passing it down through parameters.
+ * If no NavController is found in the current composition, it will throw an error.
+ */
 val LocalNavController = compositionLocalOf<NavHostController> { error("No NavController found!") }
 
 @Composable

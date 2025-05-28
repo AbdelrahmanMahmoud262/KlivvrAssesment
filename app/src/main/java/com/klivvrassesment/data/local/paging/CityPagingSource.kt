@@ -1,10 +1,9 @@
-package com.klivvrassesment.data.local.source
+package com.klivvrassesment.data.local.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.klivvrassesment.data.local.entity.CityDataEntity
 import com.klivvrassesment.data.local.utils.CityTrie
-import org.koin.core.context.startKoin
 
 class CityPagingSource(
     private val trie: CityTrie,

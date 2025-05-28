@@ -28,6 +28,18 @@ fun MapsScreenRoot(
 
 }
 
+/**
+ * Composable function that displays a Google Map centered on a given city.
+ *
+ * This function utilizes the Google Maps Compose library to render an interactive map.
+ * It takes a [CityUiModel] to determine the location to display and places a marker
+ * at the city's coordinates. The map is initially zoomed to a level of 12f.
+ *
+ * @param modifier Optional [Modifier] to be applied to the GoogleMap composable.
+ *                 Defaults to [Modifier].
+ * @param city The [CityUiModel] object containing the coordinates and name of the city
+ *             to be displayed on the map.
+ */
 @Composable
 fun MapScreen(
     modifier: Modifier = Modifier,

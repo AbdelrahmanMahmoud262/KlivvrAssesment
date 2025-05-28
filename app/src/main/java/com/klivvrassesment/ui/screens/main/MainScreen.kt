@@ -138,6 +138,7 @@ fun MainScreen(
             val focusManager = LocalFocusManager.current
 
             LaunchedEffect(listState.isScrollInProgress) {
+                // Clearing the focus when the user starts scrolling to hide the search bar keyboard if in focus
                 if (listState.isScrollInProgress) focusManager.clearFocus()
             }
             LazyColumn(
@@ -145,6 +146,14 @@ fun MainScreen(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
+                /**
+                 * Iterating through the loaded cities then generating the appropriate key, deciding the content type and content for each item
+                 * whether it is a header[HeaderItem] or a city[CityItem]
+                 *
+                 * @see CityListItem
+                 * @see CityListItem.Header
+                 * @see CityListItem.CityItem
+                 */
                 for (index in 0 until cities.itemCount) {
                     val cityListItem = cities.peek(index)
 
@@ -185,6 +194,7 @@ fun MainScreen(
                 }
             }
 
+            // Showing a loading indicator if the list is initially loading
             this@Column.AnimatedVisibility(
                 modifier = Modifier
                     .align(Alignment.Center),
@@ -198,6 +208,7 @@ fun MainScreen(
                 )
             }
 
+            // Hiding the search footer when the list is scrolled down to achieve a more natural scrolling experience
             this@Column.AnimatedVisibility(
                 modifier = Modifier
                     .align(Alignment.BottomCenter),
@@ -217,6 +228,15 @@ fun MainScreen(
 
 }
 
+/**
+ * A Composable function that displays a search bar at the bottom of the screen.
+ * It includes a text field for entering search queries and a clear button that appears
+ * when the query is not blank.
+ *
+ * @param modifier The modifier to be applied to the search bar.
+ * @param query The current search query string.
+ * @param onEvent A lambda function to be invoked when a UI event occurs, such as a change in the search query.
+ */
 @Composable
 fun SearchBarFooter(
     modifier: Modifier = Modifier,
@@ -282,6 +302,14 @@ fun SearchBarFooter(
 
 }
 
+/**
+ * Composable function to display a city item in the list.
+ * It shows the city's flag, name, country, and coordinates.
+ *
+ * @param modifier Modifier for this composable.
+ * @param city The [CityListItem.CityItem] to display.
+ * @param onCityClick Lambda function to be invoked when the city item is clicked.
+ */
 @Composable
 fun CityItem(
     modifier: Modifier = Modifier,
@@ -360,6 +388,14 @@ fun CityItem(
     }
 }
 
+/**
+ * Composable function to display a header item in the list.
+ * It shows a letter in a circular background and a vertical divider below it,
+ * unless it's the last header.
+ *
+ * @param modifier Modifier for this composable.
+ * @param header The [CityListItem.Header] data to display.
+ */
 @Composable
 fun HeaderItem(
     modifier: Modifier = Modifier,
@@ -400,6 +436,12 @@ fun HeaderItem(
 
 }
 
+/**
+ * A composable function that displays a vertical divider with a thickness of 1.dp and
+ * color from the MaterialTheme.colorScheme.onBackground.
+ *
+ * @param modifier The modifier to be applied to the divider.
+ */
 @Composable
 private fun MainDivider(
     modifier: Modifier = Modifier,

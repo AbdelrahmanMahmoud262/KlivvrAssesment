@@ -7,6 +7,18 @@ import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
 
+/**
+ * Test class for [CityTrie].
+ * This class contains unit tests to verify the functionality of the [CityTrie] data structure,
+ * specifically its ability to insert [CityDataEntity] objects and perform prefix-based searches.
+ *
+ * The tests cover various scenarios, including:
+ * - Searching with an empty prefix.
+ * - Searching with single-letter and multi-letter prefixes.
+ * - Case-insensitive searching.
+ * - Searching for non-existent prefixes.
+ * - Ensuring the order of results matches the insertion order when appropriate.
+ */
 internal class CityTrieTest {
 
     private lateinit var trie: CityTrie
@@ -18,12 +30,23 @@ internal class CityTrieTest {
         CityDataEntity(name = "Sydney", country = "AU", id = 5, coordinates = CityDataEntity.CoordinatesDataEntity(1.0, 2.0))
     )
 
+    /**
+     * Sets up the test environment before each test method.
+     *
+     * This method initializes a new [CityTrie] and inserts a predefined list of [CityDataEntity]
+     * objects into it. This ensures that each test starts with a consistent and populated Trie.
+     */
     @Before
     fun setUp() {
         trie = CityTrie()
         cities.forEach { trie.insert(it) }
     }
 
+    /**
+     * Tests that searching with an empty prefix string returns all cities in the Trie.
+     * This ensures that when no specific prefix is provided, the search defaults
+     * to returning all entries, maintaining their original insertion order.
+     */
     @Test
     fun `search empty returns all cities`() {
         val result = trie.searchPrefix("")
