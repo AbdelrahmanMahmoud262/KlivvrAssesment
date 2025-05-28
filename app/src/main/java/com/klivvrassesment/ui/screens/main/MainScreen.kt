@@ -6,14 +6,13 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,27 +22,26 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import coil3.compose.AsyncImage
 import com.klivvrassesment.R
 import com.klivvrassesment.ui.models.CityListItem
+import com.klivvrassesment.ui.utils.Constants.getFlagUrl
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MainScreenRoot(
-    modifier: Modifier = Modifier,
-    viewModel: MainViewModel = koinViewModel()
+    modifier: Modifier = Modifier, viewModel: MainViewModel = koinViewModel()
 ) {
 
     val searchQuery = viewModel.searchQuery.collectAsStateWithLifecycle()
@@ -98,8 +96,7 @@ fun MainScreen(
         Spacer(Modifier.height(16.dp))
 
         LazyColumn(
-            modifier = Modifier
-                .weight(1f)
+            modifier = Modifier.weight(1f)
         ) {
             for (index in 0 until cities.itemCount) {
                 val cityListItem = cities.peek(index)
@@ -122,9 +119,9 @@ fun MainScreen(
                     when (cityListItem) {
                         is CityListItem.CityItem -> {
                             item(key = itemKey, contentType = contentType) {
-                               CityItem(
-                                   city = (cities[index] as CityListItem.CityItem),
-                               )
+                                CityItem(
+                                    city = (cities[index] as CityListItem.CityItem),
+                                )
                             }
                         }
 
@@ -141,18 +138,18 @@ fun MainScreen(
 
             item {
                 if (cities.loadState.append is LoadState.Loading) {
-                    CircularProgressIndicator(Modifier.padding(16.dp),color = Color.Cyan)
+                    CircularProgressIndicator(Modifier.padding(16.dp), color = Color.Cyan)
                 }
             }
 
             item {
                 if (cities.loadState.append is LoadState.NotLoading) {
-                    CircularProgressIndicator(Modifier.padding(16.dp),color = Color.Blue)
+                    CircularProgressIndicator(Modifier.padding(16.dp), color = Color.Blue)
                 }
             }
             item {
                 if (cities.loadState.append is LoadState.Error) {
-                    CircularProgressIndicator(Modifier.padding(16.dp),color = Color.Red)
+                    CircularProgressIndicator(Modifier.padding(16.dp), color = Color.Red)
                 }
             }
         }
@@ -164,21 +161,23 @@ fun MainScreen(
 
 @Composable
 fun CityItem(
-    modifier: Modifier = Modifier,
-    city: CityListItem.CityItem
+    modifier: Modifier = Modifier, city: CityListItem.CityItem
 ) {
 
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
         Box(
             modifier = Modifier
-                .size(HEADER_SIZE),
+                .width(HEADER_SIZE)
+                .fillMaxHeight(),
             contentAlignment = Alignment.Center
-        ){
+        ) {
 
             MainDivider(
                 modifier = Modifier
@@ -187,31 +186,59 @@ fun CityItem(
 
         }
 
-        Column(
+        Row(
             modifier = Modifier
                 .weight(1f)
+                .padding(
+                    vertical = 8.dp
+                )
+                .clip(MaterialTheme.shapes.medium)
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(16.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
-            Text(
-                text = "${city.city.name}, ${city.city.country}",
-                color = MaterialTheme.colorScheme.onBackground,
-                style = MaterialTheme.typography.bodyLarge
+            AsyncImage(
+                model = city.city.country.getFlagUrl(),
+                contentDescription = null,
+                onError = {
+                    it.result.throwable.printStackTrace()
+                },
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(MaterialTheme.shapes.extraLarge)
+                    .background(MaterialTheme.colorScheme.onSurfaceVariant)
+                    .padding(24.dp)
             )
+
+            Column(
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                Text(
+                    text = "${city.city.name}, ${city.city.country}",
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+
+                Spacer(Modifier.height(8.dp))
+
+                Text(
+                    text = "${city.city.coordinates.lat}, ${city.city.coordinates.lon}",
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
 
     }
-
 }
 
 @Composable
 fun HeaderItem(
-    modifier: Modifier = Modifier,
-    header: CityListItem.Header
+    modifier: Modifier = Modifier, header: CityListItem.Header
 ) {
 
     Column(
-        modifier = modifier
-            .width(HEADER_SIZE)
+        modifier = modifier.width(HEADER_SIZE)
     ) {
 
         Box(
@@ -221,10 +248,9 @@ fun HeaderItem(
                 .background(MaterialTheme.colorScheme.background)
                 .border(
                     1.dp,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onBackground,
                     shape = MaterialTheme.shapes.extraLarge
-                ),
-            contentAlignment = Alignment.Center
+                ), contentAlignment = Alignment.Center
         ) {
 
             Text(
@@ -238,6 +264,7 @@ fun HeaderItem(
         MainDivider(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
+                .height(20.dp)
         )
 
     }
@@ -249,9 +276,6 @@ private fun MainDivider(
     modifier: Modifier = Modifier,
 ) {
     VerticalDivider(
-        modifier = modifier
-            .height(20.dp),
-        thickness = 1.dp,
-        color = MaterialTheme.colorScheme.onSurface
+        modifier = modifier, thickness = 1.dp, color = MaterialTheme.colorScheme.onBackground
     )
 }

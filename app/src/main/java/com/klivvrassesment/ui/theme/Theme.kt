@@ -1,8 +1,8 @@
 package com.klivvrassesment.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -21,6 +21,7 @@ private val LightColorScheme = lightColorScheme(
     onBackground = Color(0xFF1C1B1F),  // Dark text
     surface = Color.White,
     onSurface = Color(0xFF1C1B1F),
+    onSurfaceVariant = Color(0xFFececef),
     error = Color(0xFFBA1A1A),
     onError = Color.White
 )
@@ -32,8 +33,9 @@ private val DarkColorScheme = darkColorScheme(
     onSecondary = Color(0xFF00391F),
     background = Color(0xFF1C1B1F),
     onBackground = Color(0xFFE6E1E5),
-    surface = Color(0xFF1C1B1F),
-    onSurface = Color(0xFFE6E1E5),
+    surface = Color(0xFF332F36),
+    onSurface = Color.White,
+    onSurfaceVariant = Color(0xFF49454F),
     error = Color(0xFFFFB4AB),
     onError = Color(0xFF690005)
 )
@@ -42,7 +44,7 @@ private val DarkColorScheme = darkColorScheme(
 fun KlivvrAssesmentTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -58,6 +60,9 @@ fun KlivvrAssesmentTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
+        shapes = MaterialTheme.shapes.copy(
+            extraLarge = CircleShape
+        ),
         content = content
     )
 }
