@@ -120,7 +120,9 @@ fun MainScreen(
         Spacer(Modifier.height(32.dp))
 
         Text(
-            text = stringResource(R.string.cities, cities.itemCount),
+            text = stringResource(
+                R.string.cities,
+                cities.itemSnapshotList.count { it is CityListItem.CityItem || it == null }),
             color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.align(Alignment.CenterHorizontally)
