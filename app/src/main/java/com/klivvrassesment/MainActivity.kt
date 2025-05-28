@@ -7,11 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.klivvrassesment.ui.screens.main.MainScreenRoot
+import androidx.navigation.compose.rememberNavController
+import com.klivvrassesment.ui.navigation.MainNavHost
 import com.klivvrassesment.ui.theme.KlivvrAssesmentTheme
 import org.koin.compose.KoinContext
 
@@ -23,29 +21,15 @@ class MainActivity : ComponentActivity() {
             KlivvrAssesmentTheme {
                 KoinContext {
                     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                        MainScreenRoot(
+                        val navController = rememberNavController()
+                        MainNavHost(
                             modifier = Modifier
-                                .padding(innerPadding)
+                                .padding(innerPadding),
+                            navController = navController
                         )
                     }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    KlivvrAssesmentTheme {
-        Greeting("Android")
     }
 }

@@ -3,6 +3,7 @@ package com.klivvrassesment.ui.screens.main
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil3.compose.AsyncImage
 import com.klivvrassesment.R
 import com.klivvrassesment.ui.models.CityListItem
+import com.klivvrassesment.ui.navigation.LocalNavController
+import com.klivvrassesment.ui.navigation.MainScreens
 import com.klivvrassesment.ui.utils.Constants.getFlagUrl
 import org.koin.androidx.compose.koinViewModel
 
@@ -45,12 +48,23 @@ fun MainScreenRoot(
 ) {
 
     val searchQuery = viewModel.searchQuery.collectAsStateWithLifecycle()
+    val navController = LocalNavController.current
 
     MainScreen(
         modifier = modifier,
         searchQuery = searchQuery.value,
         cities = viewModel.cities.collectAsLazyPagingItems(),
         onEvent = viewModel::onEvent,
+        onCityClick = {
+            navController.navigate(
+                MainScreens.MapsScreen(
+                    lat = it.city.coordinates.lat,
+                    lng = it.city.coordinates.lng,
+                    name = it.city.name,
+                    country = it.city.country
+                )
+            )
+        }
     )
 
 }
@@ -63,6 +77,7 @@ fun MainScreen(
     modifier: Modifier = Modifier,
     searchQuery: String,
     cities: LazyPagingItems<CityListItem>,
+    onCityClick: (CityListItem.CityItem) -> Unit,
     onEvent: (MainUiEvent) -> Unit
 ) {
 
@@ -121,6 +136,7 @@ fun MainScreen(
                             item(key = itemKey, contentType = contentType) {
                                 CityItem(
                                     city = (cities[index] as CityListItem.CityItem),
+                                    onCityClick = { onCityClick(cityListItem) }
                                 )
                             }
                         }
@@ -161,7 +177,9 @@ fun MainScreen(
 
 @Composable
 fun CityItem(
-    modifier: Modifier = Modifier, city: CityListItem.CityItem
+    modifier: Modifier = Modifier,
+    city: CityListItem.CityItem,
+    onCityClick: () -> Unit
 ) {
 
     Row(
@@ -194,6 +212,9 @@ fun CityItem(
                 )
                 .clip(MaterialTheme.shapes.medium)
                 .background(MaterialTheme.colorScheme.surface)
+                .clickable(
+                    onClick = onCityClick
+                )
                 .padding(16.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
@@ -222,7 +243,7 @@ fun CityItem(
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = "${city.city.coordinates.lat}, ${city.city.coordinates.lon}",
+                    text = "${city.city.coordinates.lat}, ${city.city.coordinates.lng}",
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodyMedium
                 )
